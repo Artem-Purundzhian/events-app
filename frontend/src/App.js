@@ -6,11 +6,13 @@ import NewEventPage from "./pages/NewEventPage";
 import EditEventPage from "./pages/EditEventPage";
 import Layout from "./pages/Layout";
 import EventsLayout from "./pages/EventsLayout";
+import Error from "./pages/Error";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <Error />,
     children: [
       { index: true, element: <Homepage /> },
       {
