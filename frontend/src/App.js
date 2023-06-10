@@ -12,12 +12,19 @@ import EventsLayout from "./pages/EventsLayout";
 import Error from "./pages/Error";
 import { action as eventAction } from "./components/EventForm";
 import NewsletterPage, { action as newsletterAction } from "./pages/Newsletter";
+import AuthenticationPage, {
+  action as authAction,
+} from "./pages/Authentication";
+import { action as logoutAction } from "./pages/Logout";
+import { checkAuthLoader, tokenLoader } from "./util/auth";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     errorElement: <Error />,
+    id: "root",
+    loader: tokenLoader,
     children: [
       { index: true, element: <Homepage /> },
       {
@@ -34,17 +41,40 @@ const router = createBrowserRouter([
             id: "event-detail",
             loader: eventDetailLoader,
             children: [
-              { index: true, element: <EventDetailPage />, action: deleteEventAction },
-              { path: "edit", element: <EditEventPage />, action: eventAction },
+              {
+                index: true,
+                element: <EventDetailPage />,
+                action: deleteEventAction,
+              },
+              {
+                path: "edit",
+                element: <EditEventPage />,
+                action: eventAction,
+                loader: checkAuthLoader,
+              },
             ],
           },
-          { path: "new", element: <NewEventPage />, action: eventAction },
+          {
+            path: "new",
+            element: <NewEventPage />,
+            action: eventAction,
+            loader: checkAuthLoader,
+          },
         ],
       },
       {
-        path: 'newsletter',
+        path: "newsletter",
         element: <NewsletterPage />,
         action: newsletterAction,
+      },
+      {
+        path: "auth",
+        element: <AuthenticationPage />,
+        action: authAction,
+      },
+      {
+        path: "logout",
+        action: logoutAction,
       },
     ],
   },
